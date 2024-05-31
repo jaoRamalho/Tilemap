@@ -3,15 +3,15 @@
 #include <vector>
 #include <unordered_set>
 
-#define QT_MAX_ENTIDADES 5 // quantidade maxima de entidades que um no pode ter
-#define QT_MAX_NIVEIS 4 // quantidade maxima de niveis que a quadtree pode ter
+#define QT_MAX_ENTIDADES 6 // quantidade maxima de entidades que um no pode ter
+#define QT_MAX_NIVEIS 10 // quantidade maxima de niveis que a quadtree pode ter (ALTURA DA ARVORE)
 
 class QuadTree{
     private:
 
         int nivel;
         std::vector<Entidade*> entidades;
-        QuadTree* nos[QT_MAX_NIVEIS];
+        QuadTree* nos[4];
         float posX, posY, largura, altura;
         sf::FloatRect area;
 
@@ -24,12 +24,17 @@ class QuadTree{
             this->nivel = nivel;
             area = sf::FloatRect(posX, posY, largura, altura);
 
-            for(int i = 0; i < QT_MAX_NIVEIS; i++)
+            for(int i = 0; i < 4; i++)
                 nos[i] = nullptr;
         }
 
         ~QuadTree(){
-            
+            limpar();
+            for(int i = 0; i < 4; i++)
+                if(nos[i]!= nullptr){
+                    delete nos[i];
+                    nos[i] = nullptr;
+                }
         }
 
         void inserir(Entidade* entidade);
@@ -64,7 +69,7 @@ void QuadTree::dividir(){
 void QuadTree::limpar(){
     entidades.clear();
 
-    for (int i = 0; i < QT_MAX_NIVEIS; i++){
+    for (int i = 0; i < 4; i++){
         if(nos[i] != nullptr){
             nos[i]->limpar();
         }
@@ -82,7 +87,7 @@ void QuadTree::inserir(Entidade* ent){
     }
 
     sf::FloatRect shape = ent->getShape().getGlobalBounds();
-    for(int i = 0; i < QT_MAX_NIVEIS; i++){
+    for(int i = 0; i < 4; i++){
         if(shape.intersects(nos[i]->area)){
             nos[i]->inserir(ent);
             return;

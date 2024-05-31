@@ -34,8 +34,9 @@ Fase::~Fase() {
 
 void Fase::executeEntidades() {
     for (auto entidade : entidades) {
-        if(entidade->getTipo()) 
+        if(entidade->getTipo()){
             entidade->execute();
+        }
     }
 }
 void Fase::executar() {

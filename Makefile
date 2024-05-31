@@ -19,7 +19,7 @@ $(OBJ_DIR)/%.o:	%.cpp
 	$< -o $@
 
 # Regra padrão para construir o executável
-all: compile link
+all: clean compile link
 
 compile: $(OBJ_FILES)
 
@@ -27,4 +27,4 @@ link:
 	g++ $(OBJ_FILES) -o main -Llib -lsfml-graphics -lsfml-window -lsfml-system
 # Limpar os arquivos .o e o executável
 clean:
-	rm -rf $(OBJ_DIR)/*.o main
+	del /F /Q $(OBJ_DIR)\\*.o

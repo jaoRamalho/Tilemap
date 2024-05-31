@@ -2,7 +2,7 @@
 #include "Fase.hpp"
 
 int main(){
-    sf::RenderWindow window(sf::VideoMode(1920, 1080), "SFML works!");
+    sf::RenderWindow window(sf::VideoMode(1920, 1080), "SFML works!", sf::Style::Fullscreen);
     window.setFramerateLimit(25);
     Fase fase("tiled/mapa.tmj", &window);
 
@@ -10,7 +10,9 @@ int main(){
     {
         sf::Event event;
         while (window.pollEvent(event))
-        {
+        {   
+            if(sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
+                window.close();
             if (event.type == sf::Event::Closed)
                 window.close();
         }

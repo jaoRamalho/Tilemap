@@ -1,0 +1,41 @@
+{
+    "Map/SizeTest": {
+        "height": 4300,
+        "width": 2
+    },
+    "activeFile": "",
+    "expandedProjectPaths": [
+    ],
+    "exportAsImage.drawTileGrid": true,
+    "fileStates": {
+        "mapa.tmj": {
+            "scale": 0.33,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 906.0606060606062,
+                "y": 656.060606060606
+            }
+        },
+        "tile.tsj": {
+            "scaleInEditor": 1
+        }
+    },
+    "last.imagePath": "C:/Users/JaZ/Downloads",
+    "map.height": 27,
+    "map.lastUsedFormat": "json",
+    "map.tileHeight": 40,
+    "map.tileWidth": 40,
+    "map.width": 48,
+    "openFiles": [
+    ],
+    "project": "mapa.tiled-project",
+    "recentFiles": [
+        "mapa.tmj",
+        "tile.tsj"
+    ],
+    "tileset.lastUsedFormat": "json",
+    "tileset.tileSize": {
+        "height": 40,
+        "width": 40
+    }
+}

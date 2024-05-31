@@ -3,30 +3,40 @@
 
 class Jogador : public Entidade{
     private:
+        bool pulo;
 
     public:
-    Jogador(sf::Vector2f posicao, sf::Vector2f tamanho) : Entidade(posicao, tamanho){
+    Jogador(sf::Vector2f posicao, sf::Vector2f tamanho) : Entidade(posicao, tamanho), pulo(false){
         tipo = 1;
         shape.setFillColor(sf::Color::Red);
     }
     ~Jogador(){}
     
     void execute();
+    void move();
     void colidir(Plataforma* plat, sf::FloatRect intersects);
 };
 
 void Jogador::execute(){
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)){
-        shape.move(sf::Vector2f(0, -5));
+   movimento = {0, gravidade};
+   move();
+
+   shape.move(movimento);
+}
+
+void Jogador::move(){
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::W) && !pulo) {
+        gravidade -= 15;
+        pulo = true;
     }
-    if(sf::Keyboard::isKeyPressed(sf::Keyboard::S)){
-        shape.move(sf::Vector2f(0, 5));
+    else {
+        acelerarGravidade();
     }
     if(sf::Keyboard::isKeyPressed(sf::Keyboard::A)){
-        shape.move(sf::Vector2f(-5, 0));
+        movimento.x -= 10;
     }
     if(sf::Keyboard::isKeyPressed(sf::Keyboard::D)){
-        shape.move(sf::Vector2f(5, 0));
+        movimento.x += 10;
     }
 }
 
@@ -37,13 +47,16 @@ void Jogador::colidir(Plataforma* plat, sf::FloatRect intersects){
         if (shape.getPosition().x < plat->getPosicao().x) {
             overlap.x = -intersects.width;
         } else {
-            overlap.x = +intersects.width;
+            overlap.x = intersects.width;
         }
     } else {
         if (shape.getPosition().y < plat->getPosicao().y) {
             overlap.y = -intersects.height;
+            gravidade = 0;
+            pulo = false;
         } else {
-            overlap.y = +intersects.height;
+            overlap.y = intersects.height;
+            gravidade = -gravidade;
         }
     }
 

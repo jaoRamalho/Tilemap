@@ -3,20 +3,24 @@
 #include <unordered_map>
 #include <functional>
 
+#define GRAVIDADE 0.735
+
 class Plataforma;
 class Jogador;
 
 class Entidade{
     protected:      
         sf::RectangleShape shape;
+        float gravidade;
+        sf::Vector2f movimento;
+
         int tipo;
     
     public:
-        Entidade(sf::Vector2f posicao, sf::Vector2f tamanho){
+        Entidade(sf::Vector2f posicao, sf::Vector2f tamanho) : gravidade(0), tipo(0){
             shape.setPosition(posicao);
             shape.setSize(tamanho);
             shape.setFillColor(sf::Color::Transparent);
-            tipo = 0;
             
         }
 
@@ -37,7 +41,7 @@ class Entidade{
         virtual void colidir(Plataforma* plat, sf::FloatRect intersects){}
         virtual void colidir(Jogador* jog, sf::FloatRect intersects){}
 
-
+        void acelerarGravidade() { if(gravidade <= 15) gravidade += GRAVIDADE; }
         virtual void execute(){}
 };
 
