@@ -3,8 +3,9 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "",
+    "activeFile": "mapa.tmj",
     "expandedProjectPaths": [
+        "."
     ],
     "exportAsImage.drawTileGrid": true,
     "fileStates": {
@@ -12,11 +13,12 @@
             "scale": 0.33,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": 906.0606060606062,
-                "y": 656.060606060606
+                "x": 900.0000000000002,
+                "y": 298.4848484848484
             }
         },
         "tile.tsj": {
+            "scaleInDock": 0.75,
             "scaleInEditor": 1
         }
     },
@@ -27,6 +29,7 @@
     "map.tileWidth": 40,
     "map.width": 48,
     "openFiles": [
+        "mapa.tmj"
     ],
     "project": "mapa.tiled-project",
     "recentFiles": [

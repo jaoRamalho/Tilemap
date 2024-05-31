@@ -4,7 +4,7 @@
 #include <unordered_set>
 
 #define QT_MAX_ENTIDADES 6 // quantidade maxima de entidades que um no pode ter
-#define QT_MAX_NIVEIS 10 // quantidade maxima de niveis que a quadtree pode ter (ALTURA DA ARVORE)
+#define QT_MAX_NIVEIS 10 // quantidade maxima de niveis que a quadtree pode ter (ALTURA DA ARVORE) (obbs: n está limitado ainda)
 
 class QuadTree{
     private:
