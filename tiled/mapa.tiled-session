@@ -10,11 +10,11 @@
     "exportAsImage.drawTileGrid": true,
     "fileStates": {
         "mapa.tmj": {
-            "scale": 0.33,
+            "scale": 2,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": 900.0000000000002,
-                "y": 298.4848484848484
+                "x": 262.75,
+                "y": 56.75
             }
         },
         "tile.tsj": {

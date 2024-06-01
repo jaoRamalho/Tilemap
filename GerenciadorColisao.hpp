@@ -16,6 +16,7 @@ class GerenciadorColisao{
         static GerenciadorColisao* getInstancia();
         void executar(std::vector<Entidade*>* entidades);
         void verificarColisao(Entidade* ent1, Entidade* ent2);
+        void executarBruto(std::vector<Entidade*>* entidades);
 };
 
 GerenciadorColisao* GerenciadorColisao::instancia = nullptr;
@@ -48,8 +49,10 @@ void GerenciadorColisao::verificarColisao(Entidade* ent1, Entidade* ent2){
 }
 
 void GerenciadorColisao::executar(std::vector<Entidade*>* entidades){
+    int cont = 0;
     for(auto ent : *entidades){
         quadtree->inserir(ent);
+        cont++;
     }
 
     for(Entidade* ent : *entidades){
@@ -62,11 +65,29 @@ void GerenciadorColisao::executar(std::vector<Entidade*>* entidades){
                 //verificar se houve colisao
                 verificarColisao(ent, e);
             }
+            cont++;
         }
     }
 
+    //std::cout << cont << std::endl;
     quadtree->limpar();
 }
+
+void GerenciadorColisao::executarBruto(std::vector<Entidade*>* entidades){
+    int cont = 0;
+    for(int i = 0; i < entidades->size(); i++){
+        Entidade* ent1 = entidades->at(i);
+        for(int j = i + 1; j < entidades->size(); j++){
+            Entidade* ent2 = entidades->at(j);
+            if(ent1 != ent2 && !(ent1->getTipo() == 2 && ent2->getTipo() == 2)){
+                verificarColisao(ent1, ent2);
+            }
+            cont++;
+        }
+    }
+    //std::cout << cont << std::endl;
+}
+
 
 void GerenciadorColisao::criarMapaColisoes(){
     mapaColisoes[1] = [](Entidade* ent, Entidade* jogador, sf::FloatRect intersect){ ent->colidir(dynamic_cast<Jogador*>(jogador), intersect);};

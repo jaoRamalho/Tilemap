@@ -28,10 +28,10 @@ void Jogador::move(){
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::W) && !pulo) {
         gravidade -= 15;
         pulo = true;
-    }
-    else {
+    } else {
         acelerarGravidade();
     }
+
     if(sf::Keyboard::isKeyPressed(sf::Keyboard::A)){
         movimento.x -= 10;
     }

@@ -34,14 +34,13 @@ Fase::~Fase() {
 
 void Fase::executeEntidades() {
     for (auto entidade : entidades) {
-        if(entidade->getTipo()){
-            entidade->execute();
-        }
+        entidade->execute();
     }
 }
 void Fase::executar() {
     executeEntidades();
     gerenColisao->executar(&entidades);
+    //gerenColisao->executarBruto(&entidades);
 }
 
 void Fase::desenhar() {
