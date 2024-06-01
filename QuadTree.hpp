@@ -77,6 +77,12 @@ void QuadTree::limpar(){
 }
 
 void QuadTree::inserir(Entidade* ent){
+    sf::FloatRect shape = ent->getShape().getGlobalBounds();
+    // Verifica se a entidade intersecta a área do QuadTree
+    if (!shape.intersects(area)) {
+        return; // Se não intersecta, retorna sem inserir a entidade
+    }
+    
     if(entidades.size() < QT_MAX_ENTIDADES){
         entidades.push_back(ent);
         return;
@@ -86,7 +92,6 @@ void QuadTree::inserir(Entidade* ent){
         dividir();
     }
 
-    sf::FloatRect shape = ent->getShape().getGlobalBounds();
     for(int i = 0; i < 4; i++){
         if(shape.intersects(nos[i]->area)){
             nos[i]->inserir(ent);
