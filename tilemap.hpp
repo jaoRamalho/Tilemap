@@ -39,7 +39,7 @@ void Tilemap::criarMapa(std::string caminhoMapa, std::vector<Entidade*>* entidad
     carregarMapa(caminhoMapa);  // carrega arquivo json
     this->entidades = entidades;
     
-    //para conseguir carregar a textura do mapa preciso que o caminho tenha o mesmo nome da imagem e ambos estejam na mesma pasta e que a imagem seja em png
+    //.json tenha o mesmo nome do .png e ambos estejam na mesma pasta
     this->textura_mapa = textura_mapa;
     textura_mapa->loadFromFile(caminhoMapa.substr(0, caminhoMapa.find_last_of(".")) + ".png");
 
