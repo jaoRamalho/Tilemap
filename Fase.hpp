@@ -10,6 +10,7 @@ class Fase{
         std::vector<Entidade*> entidades;
         sf::Texture textura_mapa;
         sf::Sprite sprite_mapa;
+        QuadTree quadtree;
 
     public:
         Fase(std::string tilemapFase, sf::RenderWindow* window);
@@ -20,12 +21,15 @@ class Fase{
         void desenhar();
 };
 
-Fase::Fase(std::string tilemapFase, sf::RenderWindow* window) {
-    gerenColisao = GerenciadorColisao::getInstancia();
+Fase::Fase(std::string tilemapFase, sf::RenderWindow* window) : quadtree(0, 0, 1920, 1080), tilemap(&quadtree){
+    gerenColisao = GerenciadorColisao::getInstancia(&quadtree);
     this->window = window;
     tilemap.criarMapa(tilemapFase, &entidades, &textura_mapa);
     sprite_mapa.setTexture(textura_mapa);
-    std::cout<<entidades.size()<<std::endl;
+
+    for (auto entidade : entidades) {
+        quadtree.inserir(entidade, entidade->getShape().getGlobalBounds());
+    }
 }
 
 Fase::~Fase() {
@@ -46,7 +50,6 @@ void Fase::executar() {
 void Fase::desenhar() {
     window->draw(sprite_mapa);  
     for (auto entidade : entidades) {
-        if(entidade->getTipo() == 1)
-            entidade->desenhar(window);
+        entidade->desenhar(window);
     }   
 }

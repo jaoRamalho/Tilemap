@@ -6,7 +6,7 @@ class Jogador : public Entidade{
         bool pulo;
 
     public:
-    Jogador(sf::Vector2f posicao, sf::Vector2f tamanho) : Entidade(posicao, tamanho), pulo(false){
+    Jogador(sf::Vector2f posicao, sf::Vector2f tamanho, QuadTree* q) : Entidade(posicao, tamanho, q), pulo(false){
         tipo = 1;
         shape.setFillColor(sf::Color::Red);
     }
@@ -22,6 +22,7 @@ void Jogador::execute(){
    move();
 
    shape.move(movimento);
+   atualizarQuadtree();
 }
 
 void Jogador::move(){

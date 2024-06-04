@@ -25,6 +25,7 @@ compile: $(OBJ_FILES)
 
 link:
 	g++ $(OBJ_FILES) -o main -Llib -lsfml-graphics -lsfml-window -lsfml-system
+
 # Limpar os arquivos .o e o executável
 clean:
 	del /F /Q $(OBJ_DIR)\\*.o

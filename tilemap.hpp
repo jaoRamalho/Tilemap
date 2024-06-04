@@ -12,9 +12,10 @@ class Tilemap{
         nlohmann::json mapa; 
         std::vector<Entidade*>* entidades;
         sf::Texture* textura_mapa;
+        QuadTree* q;
 
     public:
-        Tilemap(){}
+        Tilemap(QuadTree* q) : q(q){}
         ~Tilemap(){}
 
         void carregarMapa(std::string mapJson);
@@ -65,9 +66,9 @@ void Tilemap::criarMapa(std::string caminhoMapa, std::vector<Entidade*>* entidad
 
 Entidade* Tilemap::criarEntidade(sf::Vector2f posicao, sf::Vector2f tamanho, int tipo) {
     if (tipo == -1) {
-        return new Jogador(posicao, tamanho);
+        return new Jogador(posicao, tamanho, q);
     }
     else {
-        return new Plataforma(posicao, tamanho);
+        return new Plataforma(posicao, tamanho, q);
     }
 }

@@ -1,10 +1,11 @@
 #pragma once
-#include "Entidade.hpp"
 #include <vector>
 #include <unordered_set>
 
 #define QT_MAX_ENTIDADES 5 // quantidade maxima de entidades que um no pode ter
 #define QT_MAX_NIVEIS 10 // quantidade maxima de niveis que a quadtree pode ter (ALTURA DA ARVORE) (obbs: n está limitado ainda)
+
+class Entidade;
 
 class QuadTree{
     private:
@@ -15,14 +16,8 @@ class QuadTree{
         sf::FloatRect area;
 
     public:
-        QuadTree(float posX, float posY, float largura, float altura, int nivel = 0){
-            this->posX = posX;
-            this->posY = posY;
-            this->largura = largura;
-            this->altura = altura;
-            this->nivel = nivel;
-            area = sf::FloatRect(posX, posY, largura, altura);
-
+        QuadTree(float posX, float posY, float largura, float altura, int nivel = 0) : posX(posX), posY(posY), 
+        largura(largura), altura(altura), nivel(nivel), area(posX, posY, largura, altura){
             for(int i = 0; i < 4; i++)
                 nos[i] = nullptr;
         }
@@ -36,21 +31,46 @@ class QuadTree{
                 }
         }
 
-        void inserir(Entidade* entidade);
+        void inserir(Entidade* entidade, sf::FloatRect area);
         void dividir();
         void limpar();
-        void recuperar(std::unordered_set<Entidade*>* retorno, Entidade* entidade);
+        void recuperar(std::unordered_set<Entidade*>* retorno, sf::FloatRect area);
+        void atualizar(Entidade* entidade, sf::FloatRect area);
+        void remover(Entidade* entidade);
+
 };
 
-void QuadTree::recuperar(std::unordered_set<Entidade*>* retorno, Entidade* entidade){
-    if(entidades.size() > 0 && area.intersects(entidade->getShape().getGlobalBounds())){
+void QuadTree::atualizar(Entidade* entidade, sf::FloatRect area){
+    if (this->area.intersects(area)) {
+        // Se a entidade está no mesmo quadrante, não precisamos fazer nada
+        return;
+    }
+
+    // Se a entidade se moveu para um quadrante diferente, precisamos removê-la e reinseri-la
+    remover(entidade);
+    inserir(entidade, area);
+}
+
+void QuadTree::remover(Entidade* entidade){
+    entidades.erase(std::remove(entidades.begin(), entidades.end(), entidade), entidades.end());
+
+    if(nos[0] != nullptr){
+        for(int i = 0; i < 4; i++){
+            nos[i]->remover(entidade);
+        }
+    }
+}
+
+
+void QuadTree::recuperar(std::unordered_set<Entidade*>* retorno, sf::FloatRect area){
+    if(this->area.intersects(area)){
         for(Entidade* e : entidades){
             retorno->insert(e);
         }
         
         if(nos[0] != nullptr){
             for(int i = 0; i < 4; i++){
-                nos[i]->recuperar(retorno, entidade);
+                nos[i]->recuperar(retorno, area);
             }
         }
     }
@@ -68,17 +88,14 @@ void QuadTree::dividir(){
 void QuadTree::limpar(){
     entidades.clear();
 
-    for (int i = 0; i < 4; i++){
-        if(nos[i] != nullptr){
+    if(nos[0] != nullptr)
+        for (int i = 0; i < 4; i++){
             nos[i]->limpar();
         }
-    }
 }
 
-void QuadTree::inserir(Entidade* ent){
-    sf::FloatRect shape = ent->getShape().getGlobalBounds();
-    // Verifica se a entidade intersecta a área do QuadTree
-    if (!shape.intersects(area)) {
+void QuadTree::inserir(Entidade* ent, sf::FloatRect area){
+    if (!area.intersects(this->area)) {
         return; // Se não intersecta, retorna sem inserir a entidade
     }
     
@@ -92,8 +109,8 @@ void QuadTree::inserir(Entidade* ent){
     }
 
     for(int i = 0; i < 4; i++){
-        if(shape.intersects(nos[i]->area)){
-            nos[i]->inserir(ent);
+        if(area.intersects(nos[i]->area)){
+            nos[i]->inserir(ent, area);
             return;
         }
     }
