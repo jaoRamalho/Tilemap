@@ -54,8 +54,8 @@ void Fase::executeEntidades() {
 }
 void Fase::executar() {
     executeEntidades();
-    //gerenColisao->executar(&entidades);
-    gerenColisao->executarBruto(&entidades);
+    gerenColisao->executar(&entidades);
+    //gerenColisao->executarBruto(&entidades);
 }
 
 void Fase::desenhar() {

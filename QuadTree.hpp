@@ -38,27 +38,41 @@ class QuadTree{
         void limpar();
         void recuperar(std::unordered_set<Entidade*>* retorno, sf::FloatRect area);
         void atualizar(Entidade* entidade, sf::FloatRect area);
-        void remover(Entidade* entidade);
+        void remover(Entidade* entidade, sf::FloatRect area);
 
 };
 
 void QuadTree::atualizar(Entidade* entidade, sf::FloatRect area){
     if (this->area.intersects(area)) {
         // Se a entidade está no mesmo quadrante, não precisamos fazer nada
+        if(nos[0] != nullptr){
+            for (int i = 0; i < 4; i++) {
+                if (!nos[i]->area.intersects(area)) {
+                    // Se a entidade não está no quadrante do filho, removemos ela
+                    nos[i]->remover(entidade, area);
+                }
+                else{
+                    // Se a entidade está no quadrante do filho, atualizamos o quadrante
+                    nos[i]->atualizar(entidade, area);
+                }
+            }
+        }
         return;
     }
 
     // Se a entidade se moveu para um quadrante diferente, precisamos removê-la e reinseri-la
-    remover(entidade);
+    remover(entidade, area);
     inserir(entidade, area);
 }
 
-void QuadTree::remover(Entidade* entidade){
-    entidades.erase(entidade);
+void QuadTree::remover(Entidade* entidade, sf::FloatRect area){
+    if(this->area.intersects(area)){
+        entidades.erase(entidade);
 
-    if(nos[0] != nullptr){
-        for(int i = 0; i < 4; i++){
-            nos[i]->remover(entidade);
+        if(nos[0] != nullptr){
+            for(int i = 0; i < 4; i++){
+                nos[i]->remover(entidade, area);
+            }
         }
     }
 }

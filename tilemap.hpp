@@ -52,8 +52,8 @@ void Tilemap::criarMapa(std::string caminhoMapa, std::vector<Entidade*>* entidad
     int indice = 0;
 
     //Loop para criar as entidades 0 = vazio, -1 = jogador e outros valores são entidades diversas
-   /*
-    for (int y = 0; y < height; y++) {
+   
+    /*for (int y = 0; y < height; y++) {
         for (int x = 0; x < width; x++) {
             int tileId = mapa["layers"][0]["data"][indice++];
             if(tileId != 0){
@@ -62,8 +62,7 @@ void Tilemap::criarMapa(std::string caminhoMapa, std::vector<Entidade*>* entidad
                 entidades->push_back(criarEntidade(posicao, tamanho, tileId));
             }
         }
-    }
-    */
+    }*/
 
 
 
