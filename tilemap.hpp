@@ -9,10 +9,10 @@
 
 class Tilemap{
     private:
-        nlohmann::json mapa; 
-        std::vector<Entidade*>* entidades;
-        sf::Texture* textura_mapa;
-        QuadTree* q;
+        nlohmann::json mapa; // mapa.json
+        std::vector<Entidade*>* entidades; // vetor de entidades (referencia da fase)
+        sf::Texture* textura_mapa;  
+        QuadTree* q;    // quadtree (referencia da fase)
 
     public:
         Tilemap(QuadTree* q) : q(q){}
@@ -52,6 +52,7 @@ void Tilemap::criarMapa(std::string caminhoMapa, std::vector<Entidade*>* entidad
     int indice = 0;
 
     //Loop para criar as entidades 0 = vazio, -1 = jogador e outros valores são entidades diversas
+   /*
     for (int y = 0; y < height; y++) {
         for (int x = 0; x < width; x++) {
             int tileId = mapa["layers"][0]["data"][indice++];
@@ -62,6 +63,32 @@ void Tilemap::criarMapa(std::string caminhoMapa, std::vector<Entidade*>* entidad
             }
         }
     }
+    */
+
+
+
+    //loop para criar a fase, mas agr com entidade de taamanho diversos;
+    for(int y = 0; y < height; y++){
+        for(int x = 0; x < width; x++){
+            long long int tileId = mapa["layers"][0]["data"][indice];
+            if(tileId != 0){
+                int mult = 1;
+                while(tileId == mapa["layers"][0]["data"][++indice]){
+                    mult++;
+                }
+                sf::Vector2f posicao(x*sizeTiled, y*sizeTiled);
+                x += mult - 1;
+
+                sf::Vector2f tamanho(sizeTiled*mult, sizeTiled);
+                entidades->push_back(criarEntidade(posicao, tamanho, tileId));
+               
+            }else
+                indice++;
+        }
+    }
+
+    std::cout <<"Quantidade de entidades: "<<  entidades->size() << std::endl;
+    
 }
 
 Entidade* Tilemap::criarEntidade(sf::Vector2f posicao, sf::Vector2f tamanho, int tipo) {

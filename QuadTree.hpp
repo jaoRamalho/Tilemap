@@ -2,15 +2,17 @@
 #include <vector>
 #include <unordered_set>
 
-#define QT_MAX_ENTIDADES 5 // quantidade maxima de entidades que um no pode ter
+#define QT_MAX_ENTIDADES 3 // quantidade maxima de entidades que um no pode ter
 #define QT_MAX_NIVEIS 10 // quantidade maxima de niveis que a quadtree pode ter (ALTURA DA ARVORE) (obbs: n está limitado ainda)
 
 class Entidade;
 
+std::vector<sf::RectangleShape> shapes;
+
 class QuadTree{
     private:
         int nivel;
-        std::vector<Entidade*> entidades;
+        std::unordered_set<Entidade*> entidades;
         QuadTree* nos[4];
         float posX, posY, largura, altura;
         sf::FloatRect area;
@@ -52,7 +54,7 @@ void QuadTree::atualizar(Entidade* entidade, sf::FloatRect area){
 }
 
 void QuadTree::remover(Entidade* entidade){
-    entidades.erase(std::remove(entidades.begin(), entidades.end(), entidade), entidades.end());
+    entidades.erase(entidade);
 
     if(nos[0] != nullptr){
         for(int i = 0; i < 4; i++){
@@ -80,9 +82,33 @@ void QuadTree::dividir(){
     float meiaLargura = largura/2;
     float meiaAltura = altura/2;
     nos[0] = new QuadTree(posX, posY, meiaLargura, meiaAltura, nivel+1);
+    
+    sf::RectangleShape shape1(sf::Vector2f(meiaLargura, meiaAltura));
+    //shape1.setPosition(posX, posY);
+    //shape1.setFillColor(sf::Color(20*(nivel+1), 0, 0, 80));
+    //shapes.push_back(shape1);
+    
     nos[1] = new QuadTree(posX + meiaLargura, posY, meiaLargura, meiaAltura, nivel+1);
+
+    sf::RectangleShape shape2(sf::Vector2f(meiaLargura, meiaAltura));
+    //shape2.setPosition(posX + meiaLargura, posY);
+    //shape2.setFillColor(sf::Color(20*(nivel+1), 0, 0, 80));
+    //shapes.push_back(shape2);
+
     nos[2] = new QuadTree(posX, posY + meiaAltura, meiaLargura, meiaAltura, nivel+1);
+
+    sf::RectangleShape shape3(sf::Vector2f(meiaLargura, meiaAltura));
+    //shape3.setPosition(posX, posY + meiaAltura);
+    //shape3.setFillColor(sf::Color(20*(nivel+1), 0, 0, 80));
+    //shapes.push_back(shape3);
+
     nos[3] = new QuadTree(posX + meiaLargura, posY + meiaAltura, meiaLargura, meiaAltura, nivel+1);
+
+    sf::RectangleShape shape4(sf::Vector2f(meiaLargura, meiaAltura));
+    //shape4.setPosition(posX + meiaLargura, posY + meiaAltura);
+    //shape4.setFillColor(sf::Color(20*(nivel+1), 0, 0, 80));
+    //shapes.push_back(shape4);
+
 }
 
 void QuadTree::limpar(){
@@ -94,26 +120,26 @@ void QuadTree::limpar(){
         }
 }
 
-void QuadTree::inserir(Entidade* ent, sf::FloatRect area){
-    if (!area.intersects(this->area)) {
-        return; // Se não intersecta, retorna sem inserir a entidade
-    }
-    
-    if(entidades.size() < QT_MAX_ENTIDADES){
-        entidades.push_back(ent);
-        return;
-    }
-    
-    if(nos[0] == nullptr){
-        dividir();
-    }
-
-    for(int i = 0; i < 4; i++){
-        if(area.intersects(nos[i]->area)){
-            nos[i]->inserir(ent, area);
-            return;
+void QuadTree::inserir(Entidade* entidade, sf::FloatRect area) {
+    if (nos[0] != nullptr) {
+        for(int i = 0; i < 4; i++) {
+            if (nos[i]->area.intersects(area)) {
+                nos[i]->inserir(entidade, area);
+            }
         }
     }
 
-    entidades.push_back(ent);
+    if (entidades.size() < QT_MAX_ENTIDADES || nivel == QT_MAX_NIVEIS) {
+        entidades.insert(entidade);
+    } else {
+        if (nos[0] == nullptr) {
+            dividir();
+        }
+
+        for(int i = 0; i < 4; i++) {
+            if (nos[i]->area.intersects(area)) {
+                nos[i]->inserir(entidade, area);
+            }
+        }
+    }
 }

@@ -2,6 +2,9 @@
 #include "tilemap.hpp"
 #include "QuadTree.hpp"
 
+
+std::vector<int> vetorColisoes;
+
 class GerenciadorColisao{
     private:
         QuadTree* quadtree;
@@ -45,8 +48,9 @@ void GerenciadorColisao::verificarColisao(Entidade* ent1, Entidade* ent2){
         mapaColisoes[ent2->getTipo()](ent1, ent2, intersects);
         mapaColisoes[ent1->getTipo()](ent2, ent1, intersects);
     }
-    ent1->setColor();
-    ent2->setColor();
+
+    //ent1->setColor();
+    //ent2->setColor();
 }
 
 void GerenciadorColisao::executar(std::vector<Entidade*>* entidades){
@@ -62,11 +66,12 @@ void GerenciadorColisao::executar(std::vector<Entidade*>* entidades){
             if(ent != e){
                 //verificar se houve colisao
                 verificarColisao(ent, e);
+                cont++;
             }
-            cont++;
         }
     }
-    //std::cout << cont << std::endl;
+    vetorColisoes.push_back(cont);
+    
 }
 
 void GerenciadorColisao::executarBruto(std::vector<Entidade*>* entidades){
@@ -75,13 +80,13 @@ void GerenciadorColisao::executarBruto(std::vector<Entidade*>* entidades){
         Entidade* ent1 = entidades->at(i);
         for(int j = i + 1; j < entidades->size(); j++){
             Entidade* ent2 = entidades->at(j);
-            if(ent1 != ent2){
-                verificarColisao(ent1, ent2);
-            }
+            verificarColisao(ent1, ent2);
             cont++;
         }
     }
-    //std::cout << cont << std::endl;
+
+    vetorColisoes.push_back(cont);
+    
 }
 
 
