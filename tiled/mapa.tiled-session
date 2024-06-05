@@ -3,18 +3,19 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "mapa.tmj",
+    "activeFile": "",
     "expandedProjectPaths": [
         "."
     ],
     "exportAsImage.drawTileGrid": true,
+    "file.lastUsedOpenFilter": "Todos os Ficheiros (*)",
     "fileStates": {
         "mapa.tmj": {
-            "scale": 2,
+            "scale": 0.5,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": 262.75,
-                "y": 56.75
+                "x": 666,
+                "y": 457
             }
         },
         "tile.tsj": {
@@ -29,7 +30,6 @@
     "map.tileWidth": 40,
     "map.width": 48,
     "openFiles": [
-        "mapa.tmj"
     ],
     "project": "mapa.tiled-project",
     "recentFiles": [
